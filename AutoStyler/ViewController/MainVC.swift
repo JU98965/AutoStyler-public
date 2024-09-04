@@ -41,13 +41,23 @@ final class MainVC: UIViewController {
 
     // MARK: - 로직
     @objc private func confirmRecommend() {
+        // 버튼 비활성화 및 인디케이터
+        mainView.confirmButton.configuration?.showsActivityIndicator = true
+        mainView.confirmButton.isEnabled = false
+        
         // 현재 선택된 조합 인덱스 값 가져오기
         let topIndex = mainView.pickerView.selectedRow(inComponent: ItemPart.top.rawValue)
         let bottomIndex = mainView.pickerView.selectedRow(inComponent: ItemPart.bottom.rawValue)
         let shoesIndex = mainView.pickerView.selectedRow(inComponent: ItemPart.shoes.rawValue)
         let cody = Cody(top: Item.top[topIndex], bottom: Item.bottom[bottomIndex], shoes: Item.shoes[shoesIndex])
         
+        // 네트워크 통신 시작
         NetworkManager.shared.fetchRecommendData(cody: cody) { [weak self] result in
+            // 버튼 활성화 및 인디케이터
+            self?.mainView.confirmButton.configuration?.showsActivityIndicator = false
+            self?.mainView.confirmButton.isEnabled = true
+            
+            // rsponse 핸들링
             switch result {
             case .success(let data): 
                 let codyData = data.map { Cody(element: $0) }.compactMap { $0 }

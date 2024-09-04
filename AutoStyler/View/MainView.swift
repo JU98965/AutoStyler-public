@@ -69,9 +69,11 @@ final class MainView: UIView {
     }()
     
     let confirmButton = {
-        let button = UIButton(configuration: .filled())
+        var config = UIButton.Configuration.filled()
+        config.imagePadding = 15
+        config.baseBackgroundColor = .chuBlue
+        let button = UIButton(configuration: config)
         button.setTitle(String(localized: "이 조합으로 코디 추천받기"), for: .normal)
-        button.backgroundColor = .chuBlue
         button.layer.cornerRadius = 15
         button.clipsToBounds = true
         return button
